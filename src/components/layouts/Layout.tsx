@@ -1,12 +1,12 @@
-import Header from "@/components/layouts/header/Header";
-import Footer from "@/components/layouts/footer/Footer";
+
 import React from "react";
+import {Footer, Header} from "@/components";
 
 interface Props {
     children: React.ReactNode;
 }
 
-const Layout = ({children}:Props) => {
+export const Layout = ({children}:Props) => {
     return (
         <>
             <Header/>
@@ -16,4 +16,3 @@ const Layout = ({children}:Props) => {
     );
 };
 
-export default Layout;
