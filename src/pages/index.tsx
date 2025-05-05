@@ -1,7 +1,7 @@
 import {
     Banner,
     BestSellersSlider, DealsOfTheDays,
-    FeaturedCategories,
+    FeaturedCategories, GridSlider,
     IconBox,
     MiniProductSlider,
     Section,
@@ -83,6 +83,10 @@ export default function Home() {
                 </Link>
             </div>
             <DealsOfTheDays sliderData={dealsData}/>
+        </Section>
+
+        <Section>
+            <GridSlider/>
         </Section>
     </>
   );
