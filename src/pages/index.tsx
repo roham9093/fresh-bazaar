@@ -1,6 +1,6 @@
 import {
     Banner,
-    BestSellersSlider,
+    BestSellersSlider, DealsOfTheDays,
     FeaturedCategories,
     IconBox,
     MiniProductSlider,
@@ -11,13 +11,15 @@ import {popularProducts} from "@/mock/popularProducts";
 import {popularFruits} from "@/mock/popularFruits";
 import {bestSellers} from "@/mock/bestSellers";
 import Link from "next/link";
+import {dealsData} from "@/mock/dealsData";
+
 
 
 
 export default function Home() {
   return (
     <>
-      <Section>
+        <Section>
           <Banner title={"Don’t miss amazing grocery deals"} subTitle={"Sign up for the daily newsletter"}
                 image={"/assets/images/fresh-apples.png"}
                   bgImage={"/assets/images/banner_bg.png"}
@@ -70,6 +72,17 @@ export default function Home() {
                 </div>
                 <BestSellersSlider sliderData={bestSellers}/>
             </div>
+        </Section>
+
+        <Section>
+            <div className="flex justify-between items-center mb-[50px]">
+                <h2 className="text-heading6 md:text-heading5 lg:text-heading4 xl:text-heading3 text-blue-300">Deals Of
+                    The Days</h2>
+                <Link className="flex items-center" href="#">All Deals
+                    <IconBox icon={"icon-angle-small-right text-[24px]"} size={24}/>
+                </Link>
+            </div>
+            <DealsOfTheDays sliderData={dealsData}/>
         </Section>
     </>
   );
