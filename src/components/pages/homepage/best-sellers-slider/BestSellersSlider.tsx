@@ -1,0 +1,37 @@
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Autoplay,} from "swiper/modules";
+import {SimpleProductCard} from "@/components";
+import {bestSellersType} from "@/mock/bestSellers";
+
+ interface Props {
+     sliderData: Array<bestSellersType>
+}
+
+export const BestSellersSlider = ({sliderData}: Props) => {
+    return (
+        <Swiper
+            spaceBetween={16}
+            slidesPerView={2}
+            autoplay={true}
+            modules={[Autoplay]}
+            breakpoints= {{
+                    768: {
+                        slidesPerView: 3,
+                        spaceBetween: 18
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 22
+                    }
+            }}
+        >
+            {
+                sliderData.map((slideData,index) => (
+                    <SwiperSlide key={index}>
+                        <SimpleProductCard data={slideData} />
+                    </SwiperSlide>
+                ))
+            }
+        </Swiper>
+    );
+};
