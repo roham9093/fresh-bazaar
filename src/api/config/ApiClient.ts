@@ -7,7 +7,7 @@ const apiClient = axios.create({
 })
 
 apiClient.interceptors.response.use((response)=>{
-    return response;
+    return response.data;
 }, (error)=>{
     if (error.response) {
         if (error.response.status === 404) {
