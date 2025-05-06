@@ -4,12 +4,30 @@ import {browsCategoryMock} from "@/mock/browsCategory";
 import {mockMenu} from "@/mock/menu";
 import {useQuery} from "@tanstack/react-query";
 import {GetMenuApiCall} from "@/api/GetMenuApiCall";
+import {EntityType, MenuItemType, MenuType, PopulateType} from "@/types";
 
 export const Menu = () => {
     //TODO load menu data from api
 
     const {data:menuData} = useQuery({queryKey:[GetMenuApiCall.name],queryFn:()=>GetMenuApiCall()})
     console.log(menuData)
+
+    let mainMenuItems: null|PopulateType<MenuItemType> = null;
+    if (menuData) {
+        const findMenu =  menuData.data.filter((item:EntityType<MenuType>)=> item.attributes.position === 'main_menu');
+        console.log(findMenu)
+        if (findMenu) {
+            mainMenuItems = findMenu[0].attributes.menu_items;
+            mainMenuItems.data.sort((a:EntityType<MenuItemType>, b:EntityType<MenuItemType>)=>{
+                if (a.attributes.rank < b.attributes.rank)
+                    return -1;
+                if (a.attributes.rank > b.attributes.rank)
+                    return 1;
+                return 0;
+            })
+        }
+    }
+
     return (
         <>
             <div id="all_categories" className="flex relative cursor-pointer bg-green-200 gap-2.5 text-white px-4 py-3 rounded-[5px] items-center">
@@ -29,36 +47,23 @@ export const Menu = () => {
             </div>
             <nav id="main_menu">
                 <ul className="flex flex-col lg:flex-row items-start lg:items-center text-heading6 lg:text-heading-sm 2xl:text-heading6 gap-[32px] mt-[32px] lg:mt-0 lg:gap-3 xl:gap-5 2xl:gap-10">
-
                     {
-                        mockMenu.map((item, index) => (
-                            <li key={index}>
-                                {
-                                    item.icon ?
-                                        <IconBox
-                                            size={24}
-                                            {...item}
-                                        />:
-                                        <Link href={item.link} className="flex items-center gap-1">{item.title}</Link>
-                                }
-                            </li>
-                        ))
+                        mainMenuItems &&
+                            mainMenuItems.data.map((item:EntityType<MenuItemType>, index:number) => (
+                                <li key={index}>
+                                    {
+                                        item.attributes.icon_name?
+                                            <IconBox
+                                                title={item.attributes.title}
+                                                size={24}
+                                                link={item.attributes.link}
+                                                icon={item.attributes.icon_name}
+                                            />:
+                                            <Link href={item.attributes.link} className="flex items-center gap-1">{item.attributes.title}</Link>
+                                    }
+                                </li>
+                            ))
                     }
-                    {/*<li>*/}
-                    {/*    <Link href="#" className="flex flex-row gap-2 items-center">*/}
-                    {/*        <i className="icon-flame text-[24px]"></i>*/}
-                    {/*        <div className="text-heading6 lg:text-heading-sm xl:text-heading6">Hot Deals</div>*/}
-                    {/*    </Link>*/}
-                    {/*</li>*/}
-                    {/*<li>*/}
-                    {/*    <Link href="#" className="flex items-center gap-1">Home</Link>*/}
-                    {/*</li>*/}
-                    {/*<li>*/}
-                    {/*    <Link href="#" className="flex flex-row">Food</Link>*/}
-                    {/*</li>*/}
-                    {/*<li>*/}
-                    {/*    <Link href="#" className="flex flex-row">Vegetables</Link>*/}
-                    {/*</li>*/}
                 </ul>
             </nav>
         </>
