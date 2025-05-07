@@ -1,10 +1,11 @@
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Autoplay,} from "swiper/modules";
 import {SimpleProductCard} from "@/components";
-import {bestSellersType} from "@/mock/bestSellers";
+import {EntityType} from "@/types";
+import {ProductType} from "@/types/api/Product";
 
  interface Props {
-     sliderData: Array<bestSellersType>
+     sliderData: Array<EntityType<ProductType>>
 }
 
 export const BestSellersSlider = ({sliderData}: Props) => {

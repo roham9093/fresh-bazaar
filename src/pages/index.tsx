@@ -22,7 +22,7 @@ import {ProductType} from "@/types/api/Product";
 
 export default function Home() {
 
-   const {data : popularProductData} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_product'],queryFn:()=>getAllProducts(
+   const {data : popularProduct} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_product'],queryFn:()=>getAllProducts(
            {
                populate:["categories","thumbnail"],
                filters:{
@@ -30,11 +30,19 @@ export default function Home() {
                }
            }
        )})
-    const {data : isPopularFruit} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_fruit'],queryFn:()=>getAllProducts(
+    const {data : popularFruit} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_fruit'],queryFn:()=>getAllProducts(
             {
                 populate:["categories","thumbnail"],
                 filters:{
                     is_popular_fruit:true
+                }
+            }
+        )})
+    const {data : bestSeller} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'is_best_seller'],queryFn:()=>getAllProducts(
+            {
+                populate:["categories","thumbnail"],
+                filters:{
+                    is_best_seller:true
                 }
             }
         )})
@@ -68,8 +76,8 @@ export default function Home() {
                     <IconBox icon={"swiper-nav-right icon-angle-small-right cursor-pointer bg-gray-100 p-2 rounded-full text-gray-500 hover:bg-green-200 hover:text-white"} size={24}/> </div>
                 </div>
             {
-                popularProductData &&
-                    <SimpleProductSlider prevEl={".swiper-nav-right"} nextEl={".swiper-nav-left"} sliderData={popularProductData.data}/>
+                popularProduct &&
+                    <SimpleProductSlider prevEl={".swiper-nav-right"} nextEl={".swiper-nav-left"} sliderData={popularProduct.data}/>
             }
         </Section>
 
@@ -82,8 +90,8 @@ export default function Home() {
                 </div>
             </div>
             {
-                isPopularFruit &&
-                <SimpleProductSlider prevEl={".swiper-nav-right2"} nextEl={".swiper-nav-left2"} sliderData={isPopularFruit.data}/>
+                popularFruit &&
+                <SimpleProductSlider prevEl={".swiper-nav-right2"} nextEl={".swiper-nav-left2"} sliderData={popularFruit.data}/>
             }
         </Section>
 
@@ -99,7 +107,12 @@ export default function Home() {
                         <IconBox icon={"icon-arrow-small-right"} size={24}/>
                     </Link>
                 </div>
-                <BestSellersSlider sliderData={bestSellers}/>
+                {
+                    bestSeller &&
+                    <div className={'flex-grow'}>
+                        <BestSellersSlider sliderData={bestSeller.data}/>
+                    </div>
+                }
             </div>
         </Section>
 

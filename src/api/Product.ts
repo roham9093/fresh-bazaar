@@ -7,12 +7,14 @@ interface Props {
     filters?:{
         is_popualr?: boolean;
         is_popular_fruit?: boolean;
+        is_best_seller?: boolean;
     }
 }
 
 interface Filters {
     is_popular?: { $eq: boolean };
     is_popular_fruit?: { $eq: boolean };
+    is_best_seller?: { $eq: boolean };
 }
 
 export function getAllProducts({populate,filters}:Props):Promise<ApiResponseType<ProductType>> {
@@ -23,6 +25,9 @@ export function getAllProducts({populate,filters}:Props):Promise<ApiResponseType
     }
     if (filters?.is_popular_fruit){
         customFilters.is_popular_fruit = {$eq:filters.is_popular_fruit};
+    }
+    if (filters?.is_best_seller){
+        customFilters.is_best_seller = {$eq:filters.is_best_seller};
     }
 
     return apiClient.get(`/products`,{
