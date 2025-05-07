@@ -1,25 +1,26 @@
 import {IconBox, Logo, Menu, SearchForm} from "@/components";
 import Link from "next/link";
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
+import {useOverlay} from "@/hooks/useOverlay";
 
 export const Header = () => {
 
     const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+
+
+    useOverlay({
+        onClick:()=>{
+            setShowMobileMenu(false)
+        },
+        isOverflowHidden:showMobileMenu
+    })
 
     const showMobileMenuhandler = (e:React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         setShowMobileMenu((prevState) => !prevState);
     }
 
-    useEffect(() => {
-        const toggleMobileMenu = () => {
-            setShowMobileMenu(false);
-        }
-        document.addEventListener("click", toggleMobileMenu);
-       return () => {
-           document.removeEventListener("click", toggleMobileMenu);
-       }
-    },[])
+
     return (
         <header className="mb-[33px]">
             <div className="container flex items-center justify-between py-4 md:py-6 xl:py-8">
@@ -43,7 +44,7 @@ export const Header = () => {
             </div>
 
             <div className="border-gray-200 border-y h">
-                <div onClick={(e)=>e.stopPropagation()}  className={`container transition-all w-4/5 rounded-[24px] lg:rounded-[0px] lg:w-auto flex absolute top-0 bottom-0 ${showMobileMenu ? 'left-0' : '-left-[100%]'} lg:static flex-col lg:flex-row justify-start lg:justify-between items-start pt-[16px] pl-[24px] lg:py-[13px] lg:items-center h-[100vh] bg-white lg:h-[70px] mobile-menu z-50`}>
+                <div onClick={(e)=>e.stopPropagation()}  className={`${showMobileMenu ? 'left-0 fixed overflow-y-scroll' : '-left-[100%] absolute'} container transition-all w-4/5 rounded-[24px] lg:rounded-[0px] lg:w-auto flex top-0 bottom-0  lg:static flex-col lg:flex-row justify-start lg:justify-between items-start pt-[16px] pl-[24px] lg:py-[13px] lg:items-center h-[100vh] bg-white lg:h-[70px] mobile-menu z-50`}>
                     <Menu/>
                     <div className="hidden lg:flex items-center shrink-0 gap-3">
                         <IconBox link={"#"} icon={"icon-headset xl:text-[32px] 2xl:text-[36px] aspect-square"} size={30}/>
