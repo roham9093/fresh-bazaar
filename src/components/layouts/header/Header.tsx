@@ -1,7 +1,25 @@
 import {IconBox, Logo, Menu, SearchForm} from "@/components";
 import Link from "next/link";
+import React, {useEffect, useState} from "react";
 
 export const Header = () => {
+
+    const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
+
+    const showMobileMenuhandler = (e:React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+        setShowMobileMenu((prevState) => !prevState);
+    }
+
+    useEffect(() => {
+        const toggleMobileMenu = () => {
+            setShowMobileMenu(false);
+        }
+        document.addEventListener("click", toggleMobileMenu);
+       return () => {
+           document.removeEventListener("click", toggleMobileMenu);
+       }
+    },[])
     return (
         <header className="mb-[33px]">
             <div className="container flex items-center justify-between py-4 md:py-6 xl:py-8">
@@ -17,7 +35,7 @@ export const Header = () => {
                         <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={1}/>
                     </li>
                 </ul>
-                <button id="menu_btn" className="flex flex-col justify-between py-[4px] lg:hidden w-[24px] h-[24px]">
+                <button onClick={showMobileMenuhandler} id="menu_btn" className="flex flex-col justify-between py-[4px] lg:hidden w-[24px] h-[24px]">
                     <span className="w-full h-[1.5px] bg-black inline-block rounded"></span>
                     <span className="w-full h-[1.5px] bg-black inline-block rounded"></span>
                     <span className="w-full h-[1.5px] bg-black inline-block rounded"></span>
@@ -25,7 +43,7 @@ export const Header = () => {
             </div>
 
             <div className="border-gray-200 border-y h">
-                <div className="container transition-all w-4/5 rounded-[24px] lg:rounded-[0px] lg:w-auto flex absolute top-0 bottom-0 -left-[100%] lg:static flex-col lg:flex-row justify-start lg:justify-between items-start pt-[16px] pl-[24px] lg:py-[13px] lg:items-center h-[100vh] bg-white lg:h-[70px] mobile-menu z-50">
+                <div onClick={(e)=>e.stopPropagation()}  className={`container transition-all w-4/5 rounded-[24px] lg:rounded-[0px] lg:w-auto flex absolute top-0 bottom-0 ${showMobileMenu ? 'left-0' : '-left-[100%]'} lg:static flex-col lg:flex-row justify-start lg:justify-between items-start pt-[16px] pl-[24px] lg:py-[13px] lg:items-center h-[100vh] bg-white lg:h-[70px] mobile-menu z-50`}>
                     <Menu/>
                     <div className="hidden lg:flex items-center shrink-0 gap-3">
                         <IconBox link={"#"} icon={"icon-headset xl:text-[32px] 2xl:text-[36px] aspect-square"} size={30}/>
