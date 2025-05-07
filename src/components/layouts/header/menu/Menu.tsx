@@ -2,18 +2,38 @@ import Link from "next/link";
 import {IconBox} from "@/components";
 import {EntityType, MenuItemType} from "@/types";
 import {useMenu} from "@/hooks/useMenu";
+import React, {useEffect, useState} from "react";
 
 export const Menu = () => {
+    const [showMenu, setShowMenu] = useState<boolean>(false);
 
     const {data:mainMenuItems } = useMenu({position:'main_menu'})
     const {data:categoryMenusItem } = useMenu({position:'brows-category'})
 
+    const categoryMenuHandler = (e:React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+        setShowMenu((prevState)=>!prevState);
+    }
+
+    useEffect(()=> {
+        const toggleMenu =  () => {
+            setShowMenu(false)
+        }
+        document.addEventListener("click",toggleMenu)
+        return () => {
+            document.removeEventListener("click", toggleMenu)
+        }
+    },[])
+
+
     return (
         <>
-            <div id="all_categories" className="flex relative cursor-pointer bg-green-200 gap-2.5 text-white px-4 py-3 rounded-[5px] items-center">
-                <IconBox icon={"icon-apps"} size={24} title={"Browse All Categories"} titleClassName={"text-medium"} link={"#"}/>
-                <IconBox icon={"icon-angle-small-down"} size={24}/>
-                <div id="all_categories_box" className=" absolute z-20 bg-white left-0 top-16 w-[500px] rounded-[5px] border-[1px] border-green-300 p-[30px] hover:cursor-default">
+            <div className={"relative"}>
+                <div onClick={categoryMenuHandler} className="flex cursor-pointer bg-green-200 gap-2.5 text-white px-4 py-3 rounded-[5px] items-center">
+                    <IconBox icon={"icon-apps"} size={24} title={"Browse All Categories"} titleClassName={"text-medium"} link={"#"}/>
+                    <IconBox icon={"icon-angle-small-down"} size={24}/>
+                </div>
+                <div onClick={(e)=>e.stopPropagation()} className={`${showMenu ? 'flex' : 'hidden' } absolute z-20 bg-white left-0 top-16 w-[500px] rounded-[5px] border-[1px] border-green-300 p-[30px] hover:cursor-default`}>
                     <div id="all_cat_inner_box" className="flex flex-wrap justify-between gap-y-[15px]">
                         {
                             categoryMenusItem &&
@@ -33,7 +53,8 @@ export const Menu = () => {
                     </div>
                 </div>
             </div>
-            <nav id="main_menu">
+
+            <nav>
                 <ul className="flex flex-col lg:flex-row items-start lg:items-center text-heading6 lg:text-heading-sm 2xl:text-heading6 gap-[32px] mt-[32px] lg:mt-0 lg:gap-3 xl:gap-5 2xl:gap-10">
                     {
                         mainMenuItems &&
