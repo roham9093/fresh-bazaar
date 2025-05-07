@@ -9,7 +9,8 @@ interface Props {
 }
 
 export const ImageView = ({src,alt,width,height,className}:Props) => {
-    return (
-        <Image src={src} alt={alt} width={Number(width)} height={Number(height)} className={className ?? ''} />
-    );
+    const isRemote = src.substring(0,8) === '/uploads';
+     return (
+            <Image src={`${isRemote ? 'https://nest.navaxcollege.com'+src : src}`} alt={alt} width={Number(width)} height={Number(height)} className={className ?? ''} />
+     );
 };
