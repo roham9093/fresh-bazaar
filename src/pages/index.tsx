@@ -23,7 +23,7 @@ export default function Home() {
            {
                populate:["categories","thumbnail"],
                filters:{
-                   is_popualr: {$eq:true}
+                   is_popular: {$eq:true}
                }
            }
        )})
