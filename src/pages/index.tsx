@@ -8,10 +8,7 @@ import {
     SimpleProductSlider
 } from "@/components";
 
-import {popularFruits} from "@/mock/popularFruits";
-import {bestSellers} from "@/mock/bestSellers";
 import Link from "next/link";
-import {dealsData} from "@/mock/dealsData";
 import {useQuery} from "@tanstack/react-query";
 import {getAllProducts} from "@/api/Product";
 import {ApiResponseType} from "@/types";
@@ -26,7 +23,7 @@ export default function Home() {
            {
                populate:["categories","thumbnail"],
                filters:{
-                   is_popualr:true
+                   is_popualr: {$eq:true}
                }
            }
        )})
@@ -34,7 +31,7 @@ export default function Home() {
             {
                 populate:["categories","thumbnail"],
                 filters:{
-                    is_popular_fruit:true
+                    is_popular_fruit: {$eq:true}
                 }
             }
         )})
@@ -42,11 +39,18 @@ export default function Home() {
             {
                 populate:["categories","thumbnail"],
                 filters:{
-                    is_best_seller:true
+                    is_best_seller: {$eq:true}
                 }
             }
         )})
-
+    const {data : dealsOfDay} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'deals_of_day'],queryFn:()=>getAllProducts(
+            {
+                populate:["categories","thumbnail"],
+                filters:{
+                    discount_expire_date: {$notNull:true}
+                }
+            }
+        )})
 
   return (
     <>
@@ -124,7 +128,10 @@ export default function Home() {
                     <IconBox icon={"icon-angle-small-right text-[24px]"} size={24}/>
                 </Link>
             </div>
-            <DealsOfTheDays sliderData={dealsData}/>
+            {
+                dealsOfDay &&
+                <DealsOfTheDays sliderData={dealsOfDay.data}/>
+            }
         </Section>
 
         <Section>
