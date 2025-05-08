@@ -5,10 +5,11 @@ import {useQuery} from "@tanstack/react-query";
 import {ApiResponseType} from "@/types";
 import {ProductType} from "@/types/api/Product";
 import {getAllProducts} from "@/api/Product";
+import { InView } from "react-intersection-observer";
 
 export const GridSlider = ( ) => {
 
-    const {data : topRate} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'top_rate'],queryFn:()=>getAllProducts(
+    const {data : topRate ,refetch} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'top_rate'],queryFn:()=>getAllProducts(
             {
                 populate:["thumbnail"],
                 sort:["rate:desc"],
@@ -18,7 +19,9 @@ export const GridSlider = ( ) => {
                     widthCount:false
                 }
             }
-        )})
+        ),
+        enabled:false
+    })
     const {data : topSell} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'tops_ell'],queryFn:()=>getAllProducts(
             {
                 populate:["thumbnail"],
@@ -80,9 +83,18 @@ export const GridSlider = ( ) => {
 
             <SwiperSlide>
                 {
+                    isTrending &&
+                    <ProductVerticalList data={isTrending.data} title={"Add Recently"}/>
+                }
+            </SwiperSlide>
+
+            <SwiperSlide>
+                <InView as="div" onChange={(inView, entry) => inView && refetch()}>
+                {
                     topRate &&
                     <ProductVerticalList data={topRate.data} title={"Top Rated"}/>
                 }
+                </InView>
             </SwiperSlide>
         </Swiper>
     );
