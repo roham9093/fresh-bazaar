@@ -1,7 +1,9 @@
 import {MiniProductCard} from "@/components";
+import {EntityType} from "@/types";
+import {ProductType} from "@/types/api/Product";
 
 interface Props {
-    data: Array<any>;
+    data: Array<EntityType<ProductType>>;
     title: string;
 }
 

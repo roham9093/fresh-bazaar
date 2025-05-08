@@ -129,8 +129,7 @@ export default function Home() {
                 </Link>
             </div>
             {
-                dealsOfDay &&
-                <DealsOfTheDays sliderData={dealsOfDay.data}/>
+                dealsOfDay && <DealsOfTheDays sliderData={dealsOfDay.data}/>
             }
         </Section>
 

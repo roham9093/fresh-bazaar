@@ -1,12 +1,47 @@
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Autoplay,} from "swiper/modules";
-import {ProductVerticalList, SimpleProductCard} from "@/components";
-import topSellingData from "@/mock/topSellingData";
-import trendingProductsData from "@/mock/trendingProductsData";
-import recentlyAddedData from "@/mock/recentlyAddedData";
-import topRatedData from "@/mock/topRatedData";
+import {ProductVerticalList} from "@/components";
+import {useQuery} from "@tanstack/react-query";
+import {ApiResponseType} from "@/types";
+import {ProductType} from "@/types/api/Product";
+import {getAllProducts} from "@/api/Product";
 
 export const GridSlider = ( ) => {
+
+    const {data : topRate} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'top_rate'],queryFn:()=>getAllProducts(
+            {
+                populate:["thumbnail"],
+                sort:["rate:desc"],
+                pagination:{
+                    start:0,
+                    limit:3,
+                    widthCount:false
+                }
+            }
+        )})
+    const {data : topSell} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'tops_ell'],queryFn:()=>getAllProducts(
+            {
+                populate:["thumbnail"],
+                sort:["is_top_selling:desc"],
+                pagination:{
+                    start:0,
+                    limit:3,
+                    widthCount:false
+                }
+            }
+        )})
+    const {data : isTrending} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'is_trending'],queryFn:()=>getAllProducts(
+            {
+                populate:["thumbnail"],
+                sort:["is_trending:desc"],
+                pagination:{
+                    start:0,
+                    limit:3,
+                    widthCount:false
+                }
+            }
+        )})
+
     return (
         <Swiper
             spaceBetween={16}
@@ -30,19 +65,24 @@ export const GridSlider = ( ) => {
             }}
         >
             <SwiperSlide>
-                <ProductVerticalList data={topSellingData} title={"Top Selling"}/>
+                {
+                    topSell &&
+                    <ProductVerticalList data={topSell.data} title={"Top Selling"}/>
+                }
             </SwiperSlide>
 
             <SwiperSlide>
-                <ProductVerticalList data={trendingProductsData} title={"Trending Products"}/>
+                {
+                    isTrending &&
+                    <ProductVerticalList data={isTrending.data} title={"Trending Products"}/>
+                }
             </SwiperSlide>
 
             <SwiperSlide>
-                <ProductVerticalList data={recentlyAddedData} title={"Recently added"}/>
-            </SwiperSlide>
-
-            <SwiperSlide>
-                <ProductVerticalList data={topRatedData} title={"Top Rated"}/>
+                {
+                    topRate &&
+                    <ProductVerticalList data={topRate.data} title={"Top Rated"}/>
+                }
             </SwiperSlide>
         </Swiper>
     );
