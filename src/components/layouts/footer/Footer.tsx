@@ -2,7 +2,7 @@ import Link from "next/link";
 import {IconBox, ImageView, Logo} from "@/components";
 
 export const Footer = () => {
-    //TODO fix mobile menu
+
     return (
         <footer className="container mb-[68px]">
             <div className="mb-[68px]">
