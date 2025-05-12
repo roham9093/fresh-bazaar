@@ -18,7 +18,7 @@ import {GetMenuApiCall} from "@/api/GetMenuApiCall";
 
 
 
-export default function Home(props:any) {
+export default function Home() {
 
    const {data : popularProduct} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_product'],queryFn:()=>getAllProducts(
            {
@@ -27,8 +27,7 @@ export default function Home(props:any) {
                    is_popular: {$eq:true}
                }
            }
-       ),
-        initialData:props.products
+       )
    })
     const {data : popularFruit} = useQuery<ApiResponseType<ProductType>>({queryKey:[getAllProducts.name,'popular_fruit'],queryFn:()=>getAllProducts(
             {
@@ -151,14 +150,14 @@ export async function getServerSideProps() {
         queryFn: GetMenuApiCall,
     })
 
-    const products = await getAllProducts(
-        {
-            populate:["categories","thumbnail"],
-            filters:{
-                is_popular: {$eq:true}
-            }
-        }
-    )
+    // const products = await getAllProducts(
+    //     {
+    //         populate:["categories","thumbnail"],
+    //         filters:{
+    //             is_popular: {$eq:true}
+    //         }
+    //     }
+    // )
 
-    return {props: {products , dehydrate:dehydrate(queryClient)}};
+    return {props: { dehydrate:dehydrate(queryClient)}};
 }

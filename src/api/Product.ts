@@ -19,8 +19,6 @@ interface Props {
 
 export function getAllProducts({populate,filters={},sort=[],pagination={},topSell,trending}:Props):Promise<ApiResponseType<ProductType>> {
 
-
-
     return apiClient.get(`/products`,{
         params:{
             populate:populate?.join(','),
