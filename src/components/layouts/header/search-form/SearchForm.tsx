@@ -6,6 +6,7 @@ import {getAllProducts} from "@/api/Product";
 import {useEffect, useState} from "react";
 import {EntityType} from "@/types";
 import {ProductType} from "@/types/api/Product";
+import useDebounce from "@/hooks/useDebounce";
 
 interface Props {
     inputClassName?: string;
@@ -31,14 +32,17 @@ export const SearchForm = ({inputClassName=''}:Props) => {
     const search_text = watch("search_text")
 
     useEffect(() => {
-        if (search_text && search_text.length > 1){
-            handleSubmit(onSubmit)();
+        if (search_text){
+            delay()
         }else {
             setResults([])
         }
     }, [search_text]);
 
     const onSubmit = (data:FormData) => {
+        if (data.search_text.length <= 1)
+            return;
+
         mutation.mutate({
             title:{
                 '$containsi' : data.search_text
@@ -50,6 +54,10 @@ export const SearchForm = ({inputClassName=''}:Props) => {
             }
         })
     }
+
+    const delay = useDebounce(handleSubmit(onSubmit),1000)
+
+
 
     return (
         <div className={"relative"}>
