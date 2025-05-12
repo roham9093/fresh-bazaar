@@ -1,12 +1,14 @@
-import {IconBox, LoginModal, Logo, Menu, SearchForm} from "@/components";
+import {IconBox,RegisterModal, LoginModal, Logo, Menu, SearchForm} from "@/components";
 import Link from "next/link";
-import React, { useState} from "react";
+import React, {useState} from "react";
 import {useOverlay} from "@/hooks/useOverlay";
+import {useModal} from "@/store/ModalContext";
 
 export const Header = () => {
 
     const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
+    const {closeModal,openModal,currentModal} = useModal()
 
     useOverlay({
         onClick:()=>{
@@ -20,20 +22,30 @@ export const Header = () => {
         setShowMobileMenu((prevState) => !prevState);
     }
 
+    // const closeHandler = () => {
+    //     setShowModal(false)
+    // }
 
     return (
-        <header className="mb-[33px]">
-            <LoginModal/>
-            <div className="container flex items-center justify-between py-4 md:py-6 xl:py-8">
+        <header  className="mb-[33px]">
+            {
+                currentModal === "login" &&
+                    <LoginModal  onClose={closeModal}/>
+            }
+            {
+                currentModal === "register" &&
+                <RegisterModal onClose={closeModal}/>
+            }
+            <div  className="container flex items-center justify-between py-4 md:py-6 xl:py-8">
                 <Logo/>
                 <div className="border-2 border-green-150 rounded-[5px] max-w-[700px] w-full mx-[15px] px-[15px] hidden lg:inline-block">
                     <SearchForm inputClassName={"py-[15px]"}/>
                 </div>
-                <ul className="hidden lg:flex gap-5">
-                    <li className="flex gap-2 cursor-pointer">
+                <ul  className="hidden lg:flex gap-5">
+                    <li onClick={()=>openModal("login")} className="flex gap-2 cursor-pointer">
                         <IconBox  hideTitleOnMobile={true} titleClassName={"text-medium  text-gray-500 font-lato"} icon={"icon-user"} size={24} title={"Account"} link={"#"}/>
                     </li>
-                    <li className="flex gap-2 cursor-pointer">
+                    <li  className="flex gap-2 cursor-pointer">
                         <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={1}/>
                     </li>
                 </ul>

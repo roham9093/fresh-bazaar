@@ -1,4 +1,5 @@
 import React from "react";
+import {Portal} from "@/components";
 
 interface Props {
     children: React.ReactNode;
@@ -9,14 +10,10 @@ interface Props {
 export const Modal = ({ children, closeModal, title,  }: Props) => {
 
     return (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-            <div
-                className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-                onClick={closeModal}
-            ></div>
+        <Portal closeModal={closeModal}>
 
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-                <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-lg">
+            <div  className="flex min-h-full items-center justify-center p-4 text-center">
+                <div onClick={(e)=>e.stopPropagation()} className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-lg">
 
                     <div className="flex items-center justify-between p-4 border-b border-gray-200">
                         <h3 className="text-lg font-medium text-gray-900">{title}</h3>
@@ -24,7 +21,6 @@ export const Modal = ({ children, closeModal, title,  }: Props) => {
                             onClick={closeModal}
                             className="text-gray-400 hover:text-gray-500"
                         >
-                            <span className="sr-only">بستن</span>
                             <svg
                                 className="h-6 w-6"
                                 fill="none"
@@ -44,7 +40,7 @@ export const Modal = ({ children, closeModal, title,  }: Props) => {
                     <div className="p-6">
                         {children}
                     </div>
-                    
+
                     {/*<div className="bg-gray-50 px-4 py-3 flex justify-end gap-3">*/}
                     {/*    <button*/}
                     {/*        type="button"*/}
@@ -62,6 +58,6 @@ export const Modal = ({ children, closeModal, title,  }: Props) => {
                     {/*</div>*/}
                 </div>
             </div>
-        </div>
+        </Portal>
     );
 };

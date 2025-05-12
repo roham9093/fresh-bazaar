@@ -10,6 +10,7 @@ import {HydrationBoundary, QueryClient, QueryClientProvider} from "@tanstack/rea
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
 import React from "react";
+import {ModalContextProvider} from "@/store/ModalContext";
 
 const quickSand = Quicksand({
     subsets:['latin'],
@@ -43,16 +44,19 @@ export default function App({ Component, pageProps }: AppProps) {
       `}</style>
           <QueryClientProvider client={queryClient}>
               <HydrationBoundary state={pageProps.dehydrate}>
-                  <Layout>
-                      <Component {...pageProps} />
-                      <ToastContainer
-                          autoClose={false}
-                          hideProgressBar={false}
-                          draggable={false}
-                          position="top-right"
-                          theme="light"
-                      />
-                  </Layout>
+                  <ModalContextProvider>
+                      <div id={"portal"}></div>
+                      <Layout>
+                          <Component {...pageProps} />
+                          <ToastContainer
+                              autoClose={false}
+                              hideProgressBar={false}
+                              draggable={false}
+                              position="top-right"
+                              theme="light"
+                          />
+                      </Layout>
+                  </ModalContextProvider>
               </HydrationBoundary>
           </QueryClientProvider>
       </>
