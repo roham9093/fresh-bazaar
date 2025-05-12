@@ -1,4 +1,5 @@
 export * from "./logo"
+export * from "./modal"
 export * from "./icon-box"
 export * from "./banner"
 export * from "./rating"
