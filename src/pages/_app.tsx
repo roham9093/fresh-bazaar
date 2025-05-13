@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css"
 import React from "react";
 import {ModalContextProvider} from "@/store/ModalContext";
 import {AuthContextProvider} from "@/store/AuthContext";
+import {BasketContextProvider} from "@/store/BasketContext";
 
 const quickSand = Quicksand({
     subsets:['latin'],
@@ -44,23 +45,25 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}</style>
           <QueryClientProvider client={queryClient}>
-              <HydrationBoundary state={pageProps.dehydrate}>
-                  <AuthContextProvider>
-                      <ModalContextProvider>
-                          <div id={"portal"}></div>
-                          <Layout>
-                              <Component {...pageProps} />
-                              <ToastContainer
-                                  autoClose={false}
-                                  hideProgressBar={false}
-                                  draggable={false}
-                                  position="top-right"
-                                  theme="light"
-                              />
-                          </Layout>
-                      </ModalContextProvider>
-                  </AuthContextProvider>
-              </HydrationBoundary>
+              <BasketContextProvider>
+                  <HydrationBoundary state={pageProps.dehydrate}>
+                      <AuthContextProvider>
+                          <ModalContextProvider>
+                              <div id={"portal"}></div>
+                              <Layout>
+                                  <Component {...pageProps} />
+                                  <ToastContainer
+                                      autoClose={false}
+                                      hideProgressBar={false}
+                                      draggable={false}
+                                      position="top-right"
+                                      theme="light"
+                                  />
+                              </Layout>
+                          </ModalContextProvider>
+                      </AuthContextProvider>
+                  </HydrationBoundary>
+              </BasketContextProvider>
           </QueryClientProvider>
       </>
   );
