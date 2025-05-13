@@ -2,7 +2,6 @@ import {IconBox} from "@/components";
 import {useForm} from "react-hook-form";
 import {useMutation} from "@tanstack/react-query";
 import {getAllProducts} from "@/api/Product";
-
 import {useEffect, useState} from "react";
 import {EntityType} from "@/types";
 import {ProductType} from "@/types/api/Product";

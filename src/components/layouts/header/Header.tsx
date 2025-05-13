@@ -3,9 +3,11 @@ import Link from "next/link";
 import React, {useState} from "react";
 import {useOverlay} from "@/hooks/useOverlay";
 import {useModal} from "@/store/ModalContext";
+import {useUser} from "@/store/AuthContext";
+import {toast} from "react-toastify";
 
 export const Header = () => {
-
+    const {isLogin , logout} = useUser()
     const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
 
     const {closeModal,openModal,currentModal} = useModal()
@@ -22,9 +24,14 @@ export const Header = () => {
         setShowMobileMenu((prevState) => !prevState);
     }
 
-    // const closeHandler = () => {
-    //     setShowModal(false)
-    // }
+   const accountHandler = () => {
+        if (isLogin){
+            logout()
+            toast.success("you are logged out!")
+        }else {
+            openModal("login")
+        }
+   }
 
     return (
         <header  className="mb-[33px]">
@@ -42,8 +49,8 @@ export const Header = () => {
                     <SearchForm inputClassName={"py-[15px]"}/>
                 </div>
                 <ul  className="hidden lg:flex gap-5">
-                    <li onClick={()=>openModal("login")} className="flex gap-2 cursor-pointer">
-                        <IconBox  hideTitleOnMobile={true} titleClassName={"text-medium  text-gray-500 font-lato"} icon={"icon-user"} size={24} title={"Account"} link={"#"}/>
+                    <li onClick={accountHandler} className="flex gap-2 cursor-pointer">
+                        <IconBox  hideTitleOnMobile={true} titleClassName={"text-medium  text-gray-500 font-lato"} icon={"icon-user"} size={24} title={`${isLogin ? 'Logout' : 'Login/Register'}`} link={"#"}/>
                     </li>
                     <li  className="flex gap-2 cursor-pointer">
                         <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={1}/>
