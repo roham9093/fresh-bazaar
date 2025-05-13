@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useContext, useReducer, useState} from "react";
 import {EntityType} from "@/types";
 import {ProductType} from "@/types/api/Product";
 
@@ -30,13 +30,56 @@ export const BasketContext = createContext<{
     getItem:(productId:number) => undefined
 })
 
+type Action = {type:"ADD_ITEM", product:EntityType<ProductType>} | {type:"INCREMENT_ITEM", productId:number}
+    | {type:"DECREMENT_ITEM", productId:number} | {type:"DELETE_ITEM", productId:number}
 
+const basketReducer = (currentStat:ProductItem[] , action:Action)=>{
+    switch (action.type) {
+        case "ADD_ITEM":
+            return [
+                ...currentStat,
+                {
+                    productId: action.product.id,
+                    title: action.product.attributes.title,
+                    price: action.product.attributes.price,
+                    img: action.product.attributes.thumbnail?.data?.attributes.url,
+                    quantity: 1,
+                }
+            ]
+        case "INCREMENT_ITEM":
+            return currentStat.map((item=>{
+                return item.productId == action.productId ? {...item , quantity: item.quantity + 1} : item
+            }))
+        case "DECREMENT_ITEM":
+            const currentProduct = currentStat.find((item)=>{
+            item.productId === action.productId
+                })
+            if(currentProduct && currentProduct.quantity === 1 ) {
+                return currentStat.filter((item)=> item.productId !== action.productId )
+            }
+            return  currentStat.map((item=>{
+                    if (item.productId == action.productId) {
+                        return {...item , quantity: item.quantity - 1}
+                    }else {
+                        return item
+                    }
+            }))
+        case "DELETE_ITEM":
+            return currentStat.filter((item)=> item.productId !== action.productId )
+        default:
+            return currentStat
+
+    }
+}
 
 export function BasketContextProvider({children}:Props) {
-    const [basketItem , setBasketItem] = useState<Array<ProductItem>>([])
+    /*const [basketItem , setBasketItem] = useState<Array<ProductItem>>([])*/
+    const [ basketItem , dispatch ] = useReducer(basketReducer,[])
 
     const addItemHandler = (product : EntityType<ProductType>) => {
-        const newProduct : ProductItem = {
+        dispatch({type:"ADD_ITEM", product:product})
+
+        /*const newProduct : ProductItem = {
             productId:product.id,
             title:product.attributes.title,
             price:product.attributes.price,
@@ -47,26 +90,28 @@ export function BasketContextProvider({children}:Props) {
         setBasketItem(prevState => [
             ...prevState,
             newProduct
-        ])
+        ])*/
 
-        console.log(newProduct)
     }
 
 
     const incrementItemHandler = (productId : number) => {
-            const newBasket  = basketItem.map((item=>{
+        dispatch({type:"INCREMENT_ITEM", productId:productId})
+
+        /*const newBasket  = basketItem.map((item=>{
                 if (item.productId == productId) {
                     return {...item , quantity: item.quantity + 1}
                 }else {
                     return item
                 }
-            }))
-            setBasketItem(newBasket)
+            }))*/
+            /*setBasketItem(newBasket)*/
     }
 
 
     const decrementItemHandler = (productId : number) => {
-        const currentProduct = basketItem.find((item)=>{
+        dispatch({type:"DECREMENT_ITEM", productId:productId})
+/*        const currentProduct = basketItem.find((item)=>{
             item.productId === productId
         })
         if(currentProduct && currentProduct.quantity === 1 ) {
@@ -80,13 +125,14 @@ export function BasketContextProvider({children}:Props) {
                 }
             }))
             setBasketItem(newBasket)
-        }
+        }*/
     }
 
 
     const deleteItemHandler = (productId : number) => {
-        const newBasket = basketItem.filter((item)=> item.productId !== productId )
-        setBasketItem(newBasket)
+        dispatch({type:"DELETE_ITEM", productId:productId})
+/*        const newBasket = basketItem.filter((item)=> item.productId !== productId )
+        setBasketItem(newBasket)*/
     }
 
     const getItem = (productId : number) :ProductItem|undefined => {

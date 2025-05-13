@@ -36,7 +36,6 @@ export const MiniProductSlider = ({}: Props) => {
                                 <Link href={item.link}
                                       className="mt-6 pl-[15px] pr-2.5 py-2 bg-green-200 hover:bg-yellow-100 rounded-[3px] cursor-pointer inline-flex max-w-max items-center gap-2.5">
                                     <div className="text-xsmall text-white">Shop now</div>
-                                    <i className="icon-arrow-small-right text-[24px]"></i>
                                     <IconBox icon={"icon-arrow-small-right"} size={24}/>
                                 </Link>
                             </div>
