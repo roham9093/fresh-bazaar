@@ -14,22 +14,23 @@ interface ProductItem {
     quantity: number;
 }
 
-const BasketContext = createContext<{
+export const BasketContext = createContext<{
     basketItem : Array<ProductItem>;
     addItem: (product : EntityType<ProductType>) => void;
     incrementItem: (productId : number) => void;
     decrementItem: (productId : number) => void;
     deleteItem: (productId : number) => void;
+    getItem:(productId:number) => undefined | ProductItem
 }>({
     basketItem : [],
     addItem: (product : EntityType<ProductType>) => {},
     incrementItem: (productId : number) => {},
     decrementItem: (productId : number) => {},
     deleteItem: (productId : number) => {},
+    getItem:(productId:number) => undefined
 })
 
 
-export const useBasket = useContext(BasketContext)
 
 export function BasketContextProvider({children}:Props) {
     const [basketItem , setBasketItem] = useState<Array<ProductItem>>([])
@@ -47,6 +48,8 @@ export function BasketContextProvider({children}:Props) {
             ...prevState,
             newProduct
         ])
+
+        console.log(newProduct)
     }
 
 
@@ -64,7 +67,7 @@ export function BasketContextProvider({children}:Props) {
 
     const decrementItemHandler = (productId : number) => {
         const currentProduct = basketItem.find((item)=>{
-            item.productId = productId
+            item.productId === productId
         })
         if(currentProduct && currentProduct.quantity === 1 ) {
             deleteItemHandler(productId)
@@ -82,13 +85,17 @@ export function BasketContextProvider({children}:Props) {
 
 
     const deleteItemHandler = (productId : number) => {
-        const newBasket = basketItem.filter((item)=> item.productId != productId )
+        const newBasket = basketItem.filter((item)=> item.productId !== productId )
         setBasketItem(newBasket)
     }
 
-
+    const getItem = (productId : number) :ProductItem|undefined => {
+        return basketItem.find((item)=>{
+            item.productId === productId
+        })
+    }
     return(
-        <BasketContext.Provider value={{basketItem:basketItem ,addItem:addItemHandler ,decrementItem:decrementItemHandler ,incrementItem:incrementItemHandler ,deleteItem:deleteItemHandler}}>
+        <BasketContext.Provider value={{basketItem:basketItem ,addItem:addItemHandler ,decrementItem:decrementItemHandler ,incrementItem:incrementItemHandler ,deleteItem:deleteItemHandler , getItem:getItem}}>
             {
                 children
             }
