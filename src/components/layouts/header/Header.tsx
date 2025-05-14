@@ -6,13 +6,14 @@ import {useModal} from "@/store/ModalContext";
 import {useUser} from "@/store/AuthContext";
 import {toast} from "react-toastify";
 import {BasketContext} from "@/store/BasketContext";
+import {useBasket} from "@/hooks/useBasket";
 
 export const Header = () => {
     const {isLogin , logout} = useUser()
     const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
-    const basket = useContext(BasketContext)
+    /*const basket = useContext(BasketContext)*/
     const {closeModal,openModal,currentModal} = useModal()
-
+    const {basketItems} = useBasket()
     useOverlay({
         onClick:()=>{
             setShowMobileMenu(false)
@@ -54,7 +55,7 @@ export const Header = () => {
                         <IconBox  hideTitleOnMobile={true} titleClassName={"text-medium  text-gray-500 font-lato"} icon={"icon-user"} size={24} title={`${isLogin ? 'Logout' : 'Login/Register'}`} link={"#"}/>
                     </li>
                     <li  className="flex gap-2 cursor-pointer">
-                        <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={basket.basketItem.length}/>
+                        <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={basketItems.length}/>
                     </li>
                 </ul>
                 <button onClick={showMobileMenuhandler} id="menu_btn" className="flex flex-col justify-between py-[4px] lg:hidden w-[24px] h-[24px]">
@@ -88,7 +89,7 @@ export const Header = () => {
                             <IconBox  hideTitleOnMobile={true} titleClassName={"text-medium  text-gray-500 font-lato"} icon={"icon-user"} size={24} title={"Account"} link={"#"}/>
                         </li>
                         <li className="flex gap-2 cursor-pointer">
-                            <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={basket.basketItem.length}/>
+                            <IconBox  icon={"icon-shopping-cart"} titleClassName={"text-medium  text-gray-500 font-lato"} link={"#"} title={"Card"} size={24} hideTitleOnMobile={true} badge={basketItems.length}/>
                         </li>
                     </ul>
                 </div>

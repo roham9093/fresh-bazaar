@@ -6,6 +6,15 @@ const apiClient = axios.create({
     timeout: 120000,
 })
 
+apiClient.interceptors.request.use(function (request) {
+    const token = window.localStorage.getItem("token");
+
+    if (token) {
+        request.headers.Authorization = `Bearer ${token}`;
+    }
+    return request;
+})
+
 apiClient.interceptors.response.use((response)=>{
     return response.data;
 }, (error)=>{
