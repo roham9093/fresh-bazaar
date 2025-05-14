@@ -5,6 +5,7 @@ import {useForm} from "react-hook-form";
 import {useMutation} from "@tanstack/react-query";
 import {loginApiCall} from "@/api/Auth";
 import {toast} from "react-toastify";
+import {useBasket} from "@/hooks/useBasket";
 
 interface Props {
     onClose: () => void;
@@ -16,7 +17,7 @@ interface FormData {
 export const LoginModal = ({onClose}: Props) => {
     const {openModal , closeModal} = useModal()
     const {login} = useUser()
-
+    const {uuid2user} = useBasket()
     const {register,handleSubmit,formState:{errors}} = useForm<FormData>()
 
     const mutate = useMutation({mutationFn:loginApiCall})
@@ -28,6 +29,7 @@ export const LoginModal = ({onClose}: Props) => {
                 login(response.jwt,response.user)
                 toast.success("Login successful");
                 closeModal()
+                uuid2user()
             }
         })
     }

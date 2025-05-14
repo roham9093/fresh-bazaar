@@ -5,6 +5,7 @@ import {registerApiCall} from "@/api/Auth";
 import {useUser} from "@/store/AuthContext";
 import {toast} from "react-toastify";
 import {useModal} from "@/store/ModalContext";
+import {useBasket} from "@/hooks/useBasket";
 
 interface Props {
     onClose: () => void;
@@ -17,6 +18,7 @@ interface FormData {
 export const RegisterModal = ({onClose}: Props) => {
     const {closeModal} = useModal()
     const {login} = useUser()
+    const {uuid2user} = useBasket()
 
     const {register,handleSubmit,formState:{errors}} = useForm<FormData>()
 
@@ -29,6 +31,7 @@ export const RegisterModal = ({onClose}: Props) => {
                 login(response.jwt,response.user)
                 toast.success("Register successful");
                 closeModal()
+                uuid2user()
             }
         })
     }

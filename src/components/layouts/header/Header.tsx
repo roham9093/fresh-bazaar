@@ -7,8 +7,11 @@ import {useUser} from "@/store/AuthContext";
 import {toast} from "react-toastify";
 import {BasketContext} from "@/store/BasketContext";
 import {useBasket} from "@/hooks/useBasket";
+import {useQueryClient} from "@tanstack/react-query";
 
 export const Header = () => {
+    const queryClient = useQueryClient()
+
     const {isLogin , logout} = useUser()
     const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
     /*const basket = useContext(BasketContext)*/
@@ -29,6 +32,7 @@ export const Header = () => {
    const accountHandler = () => {
         if (isLogin){
             logout()
+            queryClient.invalidateQueries({queryKey:['get-basket']})
             toast.success("you are logged out!")
         }else {
             openModal("login")
