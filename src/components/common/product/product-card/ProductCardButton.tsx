@@ -19,10 +19,10 @@ export const ProductCardButton = ({ProductData}: Props) => {
         <div className="add-product">
             {
                 basketItems  ?
-                    <div className=" w-[80px] flex justify-between input-product__container  border-[1px] rounded-[4px] border-green-300 text-green-300 h-[30px] p-[3px]">
+                    <div className=" w-[80px] flex justify-between input-product__container  border-[1px] rounded-[4px] border-green-300 text-green-300 h-[30px] ">
                         <div className="flex flex-col justify-between">
-                            <IconBox onClick={()=>updateItems(ProductData.id , 'increase')} icon="up icon-angle-small-up" size={10}/>
-                            <IconBox onClick={()=>updateItems(ProductData.id , 'decrease' )} icon="down icon-angle-small-down" size={10}/>
+                            <IconBox onClick={()=>updateItems(ProductData.id , 'increase')} icon="up icon-angle-small-up cursor-pointer" size={10}/>
+                            <IconBox onClick={()=>updateItems(ProductData.id , 'decrease' )} icon="down icon-angle-small-down cursor-pointer" size={10}/>
                         </div>
                         {
                             basketItems.quantity
